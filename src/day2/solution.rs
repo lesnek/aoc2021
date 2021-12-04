@@ -6,7 +6,7 @@ pub fn solution1(data: Vec<(String, i32)>) -> (i32, i32) {
             "forward" => horizontal += value,
             "down" => depth += value,
             "up" => depth -= value,
-            _ => panic!("Je to v piči")
+            _ => panic!("Je to v piči"),
         }
     }
     (horizontal, depth)
@@ -36,10 +36,10 @@ pub fn solution2(data: Vec<(String, i32)>) -> (i32, i32) {
             "forward" => {
                 horizontal += value;
                 depth += aim * value;
-            },
+            }
             "down" => aim += value,
             "up" => aim -= value,
-            _ => panic!("Je to v piči")
+            _ => panic!("Je to v piči"),
         }
     }
     (horizontal, depth)

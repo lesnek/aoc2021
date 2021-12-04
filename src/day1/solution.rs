@@ -10,7 +10,7 @@ pub fn solution1(data: Vec<u32>) -> u32 {
     total
 }
 
-pub fn solution2(data: Vec<u32>) -> u32{
+pub fn solution2(data: Vec<u32>) -> u32 {
     let mut total: u32 = 0;
     let mut sum_list = vec![data[0], data[1], data[2]];
     let mut previous_sum: u32 = sum_list.iter().sum();
