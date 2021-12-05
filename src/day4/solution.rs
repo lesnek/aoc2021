@@ -8,7 +8,7 @@ fn get_called_numbers(mut input: &mut Lines) -> Vec<u32> {
     (&mut input)
         .next()
         .unwrap()
-        .split(",")
+        .split(',')
         .map(|s| s.parse().unwrap())
         .collect()
 }
@@ -22,7 +22,7 @@ pub fn solution1(input: String) -> u32 {
     loop {
         if (&mut lines).next().is_none() {
             // Fuck off, GAME OVER.
-            break
+            break;
         }
         let game_data: Vec<&str> = (&mut lines).take(BOARD_SIZE).collect();
         let bingo = BingoBoard::new(game_data);
@@ -41,12 +41,12 @@ pub fn solution2(input: String) -> u32 {
     let mut lines = input.lines();
     let called_nums: Vec<u32> = get_called_numbers(&mut lines);
 
-    let mut latest_win  = usize::MIN;
+    let mut latest_win = usize::MIN;
     let mut winning_score: u32 = 0;
     loop {
         if (&mut lines).next().is_none() {
             // Fuck off, GAME OVER.
-            break
+            break;
         }
         let game_data: Vec<&str> = (&mut lines).take(BOARD_SIZE).collect();
         let bingo = BingoBoard::new(game_data);
@@ -94,11 +94,11 @@ impl BingoBoard {
         BingoBoard { lines }
     }
 
-    fn play(&self, called_numbers: &Vec<u32>) -> BingoResult {
+    fn play(&self, called_numbers: &[u32]) -> BingoResult {
         for turn in 0..called_numbers.len() {
             let mut called_so_far = HashSet::new();
             for called_number in called_numbers.iter().take(turn + 1) {
-                called_so_far.insert(called_number.clone());
+                called_so_far.insert(*called_number);
             }
             for line in self.lines.iter() {
                 if called_so_far.intersection(line).count() == BOARD_SIZE {
