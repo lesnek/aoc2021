@@ -34,8 +34,8 @@ pub fn solution2(data: String) -> i32 {
     let mut total: i32 = 0;
     let mut map = HashMap::new();
     for ((x1, y1), (x2, y2)) in parse(&data) {
-        let start = (x1.min(x2), y1.min(y2));
-        let end = (x2.max(x1), y2.max(y1));
+        let start = (x1, y1);
+        let end = (x2, y2);
 
         let (start_x, start_y) = start;
         let (end_x, end_y) = end;

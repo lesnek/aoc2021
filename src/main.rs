@@ -58,5 +58,5 @@ fn final_tests() {
     assert_eq!(day4::solution::solution2(data4), 17408);
     let data5 = read_to_string("data/day5.txt").unwrap();
     assert_eq!(day5::solution::solution1(data5.clone()), 7436);
-    assert_eq!(day5::solution::solution2(data5), 5);
+    assert_eq!(day5::solution::solution2(data5), 21104);
 }
