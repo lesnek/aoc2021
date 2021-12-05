@@ -1,6 +1,8 @@
+use std::fs;
 pub mod day1;
 pub mod day2;
 pub mod day3;
+pub mod day4;
 pub mod read;
 
 fn main() {
@@ -22,21 +24,21 @@ fn main() {
     //     "Horizontal is {} and depth is {} and their multiply is {}",
     //     result2_2.0, result2_2.1, result2_2.0 * result2_2.1
     // );
-    let data3 = read::file_to_str_vec("data/day3.txt");
-    let result3_1 = day3::solution::solution1(data3.clone());
-    println!(
-        "Gamma is {} and epsilon is {} and their multiply is {}",
-        result3_1.0,
-        result3_1.1,
-        result3_1.0 * result3_1.1
-    );
-    let result3_2 = day3::solution::solution2(data3);
-    println!(
-        "Oxygen is {} and co2 is {} and their multiply is {}",
-        result3_2.0,
-        result3_2.1,
-        result3_2.0 * result3_2.1
-    );
+    // let data3 = read::file_to_str_vec("data/day3.txt");
+    // let result3_1 = day3::solution::solution1(data3.clone());
+    // println!(
+    //     "Gamma is {} and epsilon is {} and their multiply is {}",
+    //     result3_1.0,
+    //     result3_1.1,
+    //     result3_1.0 * result3_1.1
+    // );
+    // let result3_2 = day3::solution::solution2(data3);
+    // println!(
+    //     "Oxygen is {} and co2 is {} and their multiply is {}",
+    //     result3_2.0,
+    //     result3_2.1,
+    //     result3_2.0 * result3_2.1
+    // );
 }
 
 #[test]
@@ -50,4 +52,7 @@ fn final_tests() {
     let data3 = read::file_to_str_vec("data/day3.txt");
     assert_eq!(day3::solution::solution1(data3.clone()), (3437, 658));
     assert_eq!(day3::solution::solution2(data3), (3995, 1696));
+    let data4 = fs::read_to_string("data/day4.txt").unwrap();
+    assert_eq!(day4::solution::solution1(data4.clone()), 50008);
+    assert_eq!(day4::solution::solution2(data4), 17408);
 }
