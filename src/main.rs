@@ -1,8 +1,9 @@
-use std::fs;
+use std::fs::read_to_string;
 pub mod day1;
 pub mod day2;
 pub mod day3;
 pub mod day4;
+pub mod day5;
 pub mod read;
 
 fn main() {
@@ -52,7 +53,10 @@ fn final_tests() {
     let data3 = read::file_to_str_vec("data/day3.txt");
     assert_eq!(day3::solution::solution1(data3.clone()), (3437, 658));
     assert_eq!(day3::solution::solution2(data3), (3995, 1696));
-    let data4 = fs::read_to_string("data/day4.txt").unwrap();
+    let data4 = read_to_string("data/day4.txt").unwrap();
     assert_eq!(day4::solution::solution1(data4.clone()), 50008);
     assert_eq!(day4::solution::solution2(data4), 17408);
+    let data5 = read_to_string("data/day5.txt").unwrap();
+    assert_eq!(day5::solution::solution1(data5.clone()), 7436);
+    assert_eq!(day5::solution::solution2(data5), 21104);
 }
