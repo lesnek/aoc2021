@@ -1,6 +1,5 @@
 use core::str::Lines;
 use std::collections::HashSet;
-use std::fs::read_to_string;
 
 const BOARD_SIZE: usize = 5;
 
@@ -125,14 +124,20 @@ impl BingoBoard {
     }
 }
 
-#[test]
-fn test_solution1() {
-    let input = read_to_string("data/day4_test.txt");
-    assert_eq!(solution1(input.unwrap()), 4512);
-}
+#[cfg(test)]
+mod tests {
+    use crate::day4::solution;
+    use std::fs::read_to_string;
 
-#[test]
-fn test_solution2() {
-    let input = read_to_string("data/day4_test.txt");
-    assert_eq!(solution2(input.unwrap()), 1924);
+    #[test]
+    fn test_solution1() {
+        let input = read_to_string("data/day4_test.txt");
+        assert_eq!(solution::solution1(input.unwrap()), 4512);
+    }
+
+    #[test]
+    fn test_solution2() {
+        let input = read_to_string("data/day4_test.txt");
+        assert_eq!(solution::solution2(input.unwrap()), 1924);
+    }
 }
