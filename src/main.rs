@@ -1,10 +1,14 @@
 // use std::fs::read_to_string;
 pub mod day1;
+pub mod day13;
 pub mod day2;
 pub mod day3;
 pub mod day4;
 pub mod day5;
 pub mod day6;
+pub mod day7;
+pub mod day8;
+pub mod day9;
 pub mod read;
 
 fn main() {
@@ -41,6 +45,9 @@ fn main() {
     //     result3_2.1,
     //     result3_2.0 * result3_2.1
     // );
+    // let test_input = read_to_string("data/day13.txt").unwrap();
+    // let parsed_input = day13::solution::parse_input(&test_input);
+    // day13::solution::solution2(&parsed_input);
 }
 
 #[cfg(test)]
