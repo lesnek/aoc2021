@@ -1,5 +1,3 @@
-use std::fs::read_to_string;
-
 pub enum Axis {
     X,
     Y,
@@ -39,14 +37,14 @@ pub fn solution2(input: &Input) -> u32 {
     number_of_dots(&matrix)
 }
 
-fn number_of_dots(matrix: &Matrix) -> u32 {
+fn number_of_dots(matrix: &[Vec<bool>]) -> u32 {
     matrix
         .iter()
-        .map(|line| line.iter().filter(|&&i| i).collect::<Vec<&bool>>().len() as u32)
+        .map(|line| line.iter().filter(|&&i| i).count() as u32)
         .sum()
 }
 
-fn create_matrix(dots: &PaperDots) -> Matrix {
+fn create_matrix(dots: &[(usize, usize)]) -> Matrix {
     let max_x = dots.iter().map(|(x, _)| *x).max().unwrap() as usize;
     let max_y = dots.iter().map(|(_, y)| *y).max().unwrap() as usize;
 
@@ -59,7 +57,7 @@ fn create_matrix(dots: &PaperDots) -> Matrix {
     matrix
 }
 
-fn rotate(matrix: &Matrix, clockwise: bool) -> Matrix {
+fn rotate(matrix: &[Vec<bool>], clockwise: bool) -> Matrix {
     let size_x = matrix[0].len();
     let size_y = matrix.len();
 
@@ -79,29 +77,25 @@ fn rotate(matrix: &Matrix, clockwise: bool) -> Matrix {
     new_matrix
 }
 
-fn fold_along(matrix: &Matrix, (axis, value): &FoldAlong) -> Matrix {
+fn fold_along(matrix: &[Vec<bool>], (axis, value): &FoldAlong) -> Matrix {
     match axis {
-        Axis::X => rotate(&fold_along_y(&rotate(&matrix, false), *value), true),
+        Axis::X => rotate(&fold_along_y(&rotate(matrix, false), *value), true),
         Axis::Y => fold_along_y(matrix, *value),
     }
 }
 
-fn fold_along_y(matrix: &Matrix, value: usize) -> Matrix {
+fn fold_along_y(matrix: &[Vec<bool>], value: usize) -> Matrix {
     if value < matrix.len() / 2 {
         return mirror_by_y(&_fold_along_y(&mirror_by_y(matrix), matrix.len() - value));
     }
 
-    return _fold_along_y(matrix, value);
+    _fold_along_y(matrix, value)
 }
 
-fn _fold_along_y(matrix: &Matrix, value: usize) -> Matrix {
+fn _fold_along_y(matrix: &[Vec<bool>], value: usize) -> Matrix {
     assert!(value >= matrix.len() / 2);
 
-    let mut new_matrix = matrix
-        .iter()
-        .take(value)
-        .map(|line| line.clone())
-        .collect::<Matrix>();
+    let mut new_matrix = matrix.iter().take(value).cloned().collect::<Matrix>();
     let size_y = new_matrix.len();
 
     for (y, line) in matrix.iter().skip(value + 1).enumerate() {
@@ -113,8 +107,8 @@ fn _fold_along_y(matrix: &Matrix, value: usize) -> Matrix {
     new_matrix
 }
 
-fn mirror_by_y(matrix: &Matrix) -> Matrix {
-    matrix.iter().rev().map(|i| i.clone()).collect::<Matrix>()
+fn mirror_by_y(matrix: &[Vec<bool>]) -> Matrix {
+    matrix.iter().rev().cloned().collect::<Matrix>()
 }
 
 pub fn parse_input(input: &str) -> Input {
@@ -129,7 +123,7 @@ pub fn parse_input(input: &str) -> Input {
         .map(|line| {
             vec_to_tuple(
                 &line
-                    .split(",")
+                    .split(',')
                     .map(|i| i.parse::<usize>().unwrap())
                     .collect::<Vec<usize>>(),
             )
@@ -151,35 +145,41 @@ fn parse_fold_input(input: &str) -> FoldAlong {
     (axis, value)
 }
 
-fn vec_to_tuple<T: Clone>(xs: &Vec<T>) -> (T, T) {
+fn vec_to_tuple<T: Clone>(xs: &[T]) -> (T, T) {
     assert_eq!(xs.len(), 2);
     (xs[0].clone(), xs[1].clone())
 }
 
-#[test]
-fn test_solution1() {
-    let test_input = read_to_string("data/day13_test_1.txt").unwrap();
-    let parsed_input = parse_input(&test_input);
-    assert_eq!(solution1(&parsed_input), 17);
-}
+#[cfg(test)]
+mod test {
+    use crate::day13::solution::*;
+    use std::fs::read_to_string;
 
-#[test]
-fn test_solution1_2() {
-    let test_input = read_to_string("data/day13_test_2.txt").unwrap();
-    let parsed_input = parse_input(&test_input);
-    assert_eq!(solution1(&parsed_input), 17);
-}
+    #[test]
+    fn test_solution1() {
+        let test_input = read_to_string("data/day13_test_1.txt").unwrap();
+        let parsed_input = parse_input(&test_input);
+        assert_eq!(solution1(&parsed_input), 17);
+    }
 
-#[test]
-fn test_solution2() {
-    let test_input = read_to_string("data/day13_test_1.txt").unwrap();
-    let parsed_input = parse_input(&test_input);
-    assert_eq!(solution2(&parsed_input), 16);
-}
+    #[test]
+    fn test_solution1_2() {
+        let test_input = read_to_string("data/day13_test_2.txt").unwrap();
+        let parsed_input = parse_input(&test_input);
+        assert_eq!(solution1(&parsed_input), 17);
+    }
 
-#[test]
-fn test_solution2_2() {
-    let test_input = read_to_string("data/day13.txt").unwrap();
-    let parsed_input = parse_input(&test_input);
-    assert_eq!(solution2(&parsed_input), 88);
+    #[test]
+    fn test_solution2() {
+        let test_input = read_to_string("data/day13_test_1.txt").unwrap();
+        let parsed_input = parse_input(&test_input);
+        assert_eq!(solution2(&parsed_input), 16);
+    }
+
+    #[test]
+    fn test_solution2_2() {
+        let test_input = read_to_string("data/day13.txt").unwrap();
+        let parsed_input = parse_input(&test_input);
+        assert_eq!(solution2(&parsed_input), 88);
+    }
 }

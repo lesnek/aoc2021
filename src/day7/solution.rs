@@ -28,7 +28,7 @@ pub fn solution2(input: String) -> i128 {
     for crab in *crabs.iter().min().unwrap()..=*crabs.iter().max().unwrap() {
         let cost = crabs
             .iter()
-            .map(|x| (1..=(x - crab).abs()).fold(0, |a, b| a + b))
+            .map(|x| (1..=(x - crab).abs()).sum::<i128>())
             .sum();
         if cost < consumption {
             consumption = cost

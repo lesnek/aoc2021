@@ -8,7 +8,7 @@ fn parse_segments_output(input: &str) -> Vec<String> {
         .collect()
 }
 
-fn parse_input(input: &str) -> Input {
+pub fn parse_input(input: &str) -> Input {
     input
         .lines()
         .map(|x| {
@@ -30,7 +30,7 @@ fn parse_input(input: &str) -> Input {
         .collect()
 }
 
-fn vec_to_tuple<T: Clone>(xs: &Vec<Vec<T>>) -> (Vec<T>, Vec<T>) {
+fn vec_to_tuple<T: Clone>(xs: &[Vec<T>]) -> (Vec<T>, Vec<T>) {
     assert_eq!(xs.len(), 2);
     (xs[0].clone(), xs[1].clone())
 }
@@ -47,7 +47,7 @@ pub fn solution1(input: String) -> usize {
 
 type Input = Vec<(Vec<SegmentType>, Vec<SegmentType>)>;
 
-pub fn solution2(input: &Input) -> u32 {
+pub fn solution2(input: Input) -> u32 {
     input.iter().map(decode_input_line).sum()
 }
 
@@ -57,12 +57,12 @@ fn decode_input_line((noise, output): &(Vec<SegmentType>, Vec<SegmentType>)) -> 
         .chain(output)
         .map(|i| i.to_owned())
         .collect::<Vec<SegmentType>>();
-    decode(&all_segments, &output)
+    decode(&all_segments, output)
 }
 
 type SegmentType = HashSet<char>;
 
-fn decode(all_segments: &Vec<SegmentType>, output: &Vec<SegmentType>) -> u32 {
+fn decode(all_segments: &[SegmentType], output: &[SegmentType]) -> u32 {
     let uniques = find_uniques(all_segments);
     output
         .iter()
@@ -74,9 +74,7 @@ fn decode(all_segments: &Vec<SegmentType>, output: &Vec<SegmentType>) -> u32 {
 }
 
 fn intersect_segments(left: &SegmentType, right: &SegmentType) -> SegmentType {
-    left.intersection(right)
-        .map(|&i| i)
-        .collect::<SegmentType>()
+    left.intersection(right).copied().collect::<SegmentType>()
 }
 
 fn decode_segment(uniques: &[SegmentType; 3], segment: &SegmentType) -> u32 {
@@ -87,18 +85,18 @@ fn decode_segment(uniques: &[SegmentType; 3], segment: &SegmentType) -> u32 {
         3 => 7,
         4 => 4,
         5 => {
-            if intersect_segments(&segment, &one_segment) == *one_segment {
+            if intersect_segments(segment, one_segment) == *one_segment {
                 3
-            } else if intersect_segments(&segment, &four_segment).len() == 3 {
+            } else if intersect_segments(segment, four_segment).len() == 3 {
                 5
             } else {
                 2
             }
         }
         6 => {
-            if intersect_segments(&segment, &seven_segment) != *seven_segment {
+            if intersect_segments(segment, seven_segment) != *seven_segment {
                 6
-            } else if intersect_segments(&segment, &four_segment) == *four_segment {
+            } else if intersect_segments(segment, four_segment) == *four_segment {
                 9
             } else {
                 0
@@ -109,7 +107,7 @@ fn decode_segment(uniques: &[SegmentType; 3], segment: &SegmentType) -> u32 {
     }
 }
 
-fn find_uniques(all_segments: &Vec<HashSet<char>>) -> [SegmentType; 3] {
+fn find_uniques(all_segments: &[HashSet<char>]) -> [SegmentType; 3] {
     let (mut one, mut four, mut seven) = (None, None, None);
 
     for segment in all_segments {
@@ -121,7 +119,7 @@ fn find_uniques(all_segments: &Vec<HashSet<char>>) -> [SegmentType; 3] {
         }
     }
 
-    [one, four, seven].map(|i| i.unwrap().clone())
+    [one, four, seven].map(|i| i.unwrap())
 }
 
 #[cfg(test)]
@@ -141,9 +139,9 @@ mod tests {
     #[test]
     fn test_input_data() {
         let test_input = read_to_string("data/day8.txt").unwrap();
-        let kokot = parse_input(&test_input);
+        let values = parse_input(&test_input);
         let unique_digits = HashSet::from([2, 3, 4, 7]);
-        for (kok1, kok2) in kokot {
+        for (kok1, kok2) in values {
             let lengths: Vec<i32> = [kok1, kok2]
                 .concat()
                 .iter()
@@ -164,10 +162,10 @@ mod tests {
     fn test_solution2() {
         let test_input = read_to_string("data/day8_test.txt").unwrap();
         let parsed_input = parse_input(&test_input);
-        assert_eq!(solution2(&parsed_input), 61229);
+        assert_eq!(solution2(parsed_input), 61229);
 
         let test_input = read_to_string("data/day8.txt").unwrap();
         let parsed_input = parse_input(&test_input);
-        assert_eq!(solution2(&parsed_input), 1007675);
+        assert_eq!(solution2(parsed_input), 1007675);
     }
 }
